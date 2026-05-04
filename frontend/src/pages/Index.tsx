@@ -12,6 +12,7 @@ import {
   Clock,
   Award,
   Users,
+  Code,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -20,6 +21,14 @@ import ServiceCard from "@/components/ServiceCard";
 import FeatureCard from "@/components/FeatureCard";
 import SectionHeader from "@/components/SectionHeader";
 import heroBg from "@/assets/hero-bg.jpg";
+import AnimatedCounter from "@/components/ui/animated-counter";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScrollCarousel from "@/components/ui/scroll-carousel";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const keyServices = [
   {
@@ -52,6 +61,12 @@ const keyServices = [
     title: "IT Consulting",
     description: "Strategic technology consulting to drive your digital transformation journey.",
   },
+  {
+    icon: Code, 
+    title: "Software Development",
+    description: "Custom web and mobile application development tailored to your business goals using modern technologies.",
+  }
+  
 ];
 
 const whyChooseUs = [
@@ -78,25 +93,44 @@ const whyChooseUs = [
 ];
 
 const stats = [
-  { value: "500+", label: "Clients Served" },
+  { value: "10+", label: "Clients Served" },
   { value: "99.9%", label: "Uptime Guarantee" },
   { value: "24/7", label: "Support Available" },
-  { value: "10+", label: "Years Experience" },
+  { value: "2+", label: "Years Experience" },
 ];
 
 export default function Index() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const panels = gsap.utils.toArray<HTMLElement>(".stack-panel");
+
+      panels.forEach((panel, i) => {
+        ScrollTrigger.create({
+          trigger: panel,
+          start: "top top",
+          pin: true,
+          pinSpacing: i === panels.length - 1,
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+
   return (
-    <div className="min-h-screen bg-background">
+    <div ref={containerRef} className="min-h-screen bg-background">
       <Navbar />
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroBg})` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground/95 via-foreground/80 to-foreground/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1D2530]/95 via-[#1D2530]/80 to-[#1D2530]/60" />
         </div>
 
         <div className="container-custom relative z-10 py-32 md:py-40">
@@ -128,7 +162,6 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Decorative Elements */}
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
       </section>
 
@@ -143,7 +176,14 @@ export default function Index() {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="text-3xl md:text-4xl font-bold text-primary mb-1">
-                  {stat.value}
+                  <AnimatedCounter to={parseInt(stat.value)} duration={2} />
+                  <span>
+                    {stat.label === "Clients Served" ? "+" :
+                      stat.label === "Uptime Guarantee" ? ".9%" :
+                        stat.label === "Support Available" ? "/7" :
+                          stat.label === "Years Experience" ? "+" : ""
+                    }
+                  </span>
                 </div>
                 <div className="text-muted-foreground text-sm font-medium">
                   {stat.label}
@@ -153,9 +193,13 @@ export default function Index() {
           </div>
         </div>
       </section>
+      {/* <section className="stack-panel relative z-10 min-h-screen section-padding bg-white"> */}
+        <ScrollCarousel />
+      {/* </section> */}
 
       {/* About Section */}
-      <section className="section-padding">
+      <section className="stack-panel relative z-30 min-h-screen section-padding bg-background">
+
         <div className="container-custom">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
@@ -199,8 +243,9 @@ export default function Index() {
         </div>
       </section>
 
+
       {/* Services Section */}
-      <section className="section-padding bg-muted/50">
+      <section className="stack-panel relative z-30 min-h-screen section-padding bg-[#0B1220]">
         <div className="container-custom">
           <SectionHeader
             badge="Our Services"
@@ -230,7 +275,7 @@ export default function Index() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 md:py-28 relative overflow-hidden">
+      <section className="stack-panel relative z-30 min-h-screen py-20 md:py-28 overflow-hidden flex items-center">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-accent opacity-95" />
         <div className="container-custom relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6 tracking-tight">
@@ -256,7 +301,10 @@ export default function Index() {
         </div>
       </section>
 
-      <Footer />
+      {/* Footer */}
+      <div className="stack-panel relative z-10">
+        <Footer />
+      </div>
     </div>
   );
 }

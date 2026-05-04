@@ -31,9 +31,9 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-30 transition-all duration-300",
         isScrolled
-          ? "bg-card/95 backdrop-blur-lg shadow-soft border-b border-border"
+          ? " backdrop-blur-md border-b border-border shadow-sm"
           : "bg-transparent"
       )}
     >
@@ -42,7 +42,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-1 group">
             <div className="w-10 h-10 rounded-xl  flex items-center justify-center  group-hover:shadow-lg transition-shadow m-0">
-               <img src="/corehex(2).png" className="" alt="logo" />
+              <img src="/corehex(2).png" className="" alt="logo" />
             </div>
             <div className="flex flex-col">
               <span className={cn(
@@ -67,14 +67,7 @@ export default function Navbar() {
                 key={item.name}
                 to={item.href}
                 className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                  location.pathname === item.href
-                    ? isScrolled
-                      ? "bg-primary/10 text-primary"
-                      : "bg-primary-foreground/20 text-primary-foreground"
-                    : isScrolled
-                    ? "text-foreground/70 hover:text-foreground hover:bg-muted"
-                    : "text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10"
+                  "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
                 )}
               >
                 {item.name}
