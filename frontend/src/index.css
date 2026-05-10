@@ -104,6 +104,10 @@
 .animate-gradientMove {
   animation: gradientMove 3s ease infinite;
 }
+
+.animate-testimonial-scroll {
+  animation: testimonial-scroll 35s linear infinite;
+}
 }
   .dark {
     --background: 215 30% 8%;
@@ -265,3 +269,14 @@
     transform: translateX(0);
   }
 }
+
+@keyframes testimonial-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
