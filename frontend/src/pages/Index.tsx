@@ -27,6 +27,8 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ScrollCarousel from "@/components/ui/scroll-carousel";
+import Cards from "@/components/ui/Cards";
+import BgCards from "@/components/ui/Cards";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -62,11 +64,11 @@ const keyServices = [
     description: "Strategic technology consulting to drive your digital transformation journey.",
   },
   {
-    icon: Code, 
+    icon: Code,
     title: "Software Development",
     description: "Custom web and mobile application development tailored to your business goals using modern technologies.",
   }
-  
+
 ];
 
 const whyChooseUs = [
@@ -101,6 +103,7 @@ const stats = [
 
 export default function Index() {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -119,6 +122,25 @@ export default function Index() {
     return () => ctx.revert();
   }, []);
 
+  useEffect(() => {
+    if (!cardsRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray<HTMLElement>(".feature-card");
+
+      // REMOVE ALL GSAP ANIMATIONS
+      gsap.set(cards, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        rotateX: 0,
+        rotateY: 0,
+        clearProps: "transform",
+      });
+    }, cardsRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div ref={containerRef} className="min-h-screen bg-background">
@@ -194,55 +216,98 @@ export default function Index() {
         </div>
       </section>
       {/* <section className="stack-panel relative z-10 min-h-screen section-padding bg-white"> */}
-        <ScrollCarousel />
+      <ScrollCarousel />
       {/* </section> */}
 
       {/* About Section */}
-      <section className="stack-panel relative z-30 min-h-screen section-padding bg-background">
+      <section className="stack-panel relative z-30 py-24 md:py-28 overflow-hidden bg-[#0B1220]">
 
-        <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div>
-              <SectionHeader
-                badge="About Us"
-                title="Your One-Stop IT Solution Provider"
-                centered={false}
-              />
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                Corehex Solutions is a leading IT services company dedicated to providing comprehensive technology solutions for businesses of all sizes. From small startups to large enterprises, we deliver reliable, secure, and scalable IT infrastructure.
-              </p>
-              <p className="text-muted-foreground leading-relaxed mb-8">
-                Our team of certified professionals brings years of experience in managing complex IT environments, ensuring your business stays ahead in the digital landscape.
-              </p>
-              <Link to="/about">
-                <Button variant="outline" size="lg">
-                  Learn More About Us
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              {whyChooseUs.map((feature, index) => (
-                <div
-                  key={feature.title}
-                  className="p-5 rounded-2xl bg-card border border-border hover-lift"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center mb-3">
-                    <feature.icon className="w-5 h-5 text-success" />
+        {/* BG EFFECT */}
+        <div className="absolute inset-0 z-0 opacity-15 pointer-events-none overflow-hidden">
+          <BgCards />
+        </div>
+
+        {/* TOP GLOW */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[420px] h-[420px] bg-primary/10 blur-[120px] rounded-full" />
+
+        <div className="container-custom relative z-20">
+
+          {/* SECTION HEADER */}
+          <div className="max-w-3xl mx-auto text-center mb-14">
+
+            {/* HEADING */}
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-white mb-5">
+              Building Smarter &{" "}
+              <span className="text-primary">
+                Secure IT Solutions
+              </span>
+            </h2>
+
+            {/* DESCRIPTION */}
+            <p className="text-sm md:text-base text-gray-400 leading-relaxed max-w-2xl mx-auto">
+              Corehex Solutions helps businesses streamline technology with reliable
+              infrastructure, cybersecurity, software development, and dedicated IT support.
+            </p>
+          </div>
+
+          {/* FEATURE GRID */}
+          <div
+            ref={cardsRef}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+          >
+            {whyChooseUs.map((feature) => (
+              <div
+                key={feature.title}
+                className="feature-card relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-lg p-6 shadow-xl group min-h-[230px]"
+              >
+
+                {/* HOVER GRADIENT */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,transparent,rgba(59,130,246,0.15),transparent)]" />
+
+                {/* GLOW ORB */}
+                <div className="absolute -top-10 -right-10 w-28 h-28 bg-primary/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition duration-500" />
+
+                {/* CONTENT */}
+                <div className="relative z-10">
+
+                  {/* ICON */}
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5">
+                    <feature.icon className="w-7 h-7 text-primary" />
                   </div>
-                  <h4 className="font-semibold text-foreground mb-1 text-sm">
+
+                  {/* TITLE */}
+                  <h3 className="text-lg font-semibold text-white mb-3">
                     {feature.title}
-                  </h4>
-                  <p className="text-muted-foreground text-xs leading-relaxed">
+                  </h3>
+
+                  {/* DESCRIPTION */}
+                  <p className="text-gray-400 text-sm leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
-              ))}
-            </div>
+
+                {/* BORDER GLOW */}
+                <div className="absolute inset-0 rounded-3xl border border-primary/0 group-hover:border-primary/20 transition-all duration-500" />
+              </div>
+            ))}
           </div>
+
+          {/* CTA */}
+          <div className="flex justify-center mt-12">
+            <Link to="/about">
+              <Button
+                variant="default"
+                size="lg"
+                className="rounded-2xl px-7"
+              >
+                Learn More About Us
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
+
         </div>
       </section>
-
 
       {/* Services Section */}
       <section className="stack-panel relative z-30 min-h-screen section-padding bg-[#0B1220]">
