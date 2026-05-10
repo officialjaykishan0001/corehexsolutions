@@ -470,36 +470,230 @@ export default function Index() {
       </section>
 
       {/* CTA Section */}
-      <section className="stack-panel relative z-30 min-h-screen py-20 md:py-28 overflow-hidden flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-accent opacity-95" />
-        <div className="container-custom relative z-10 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6 tracking-tight">
-            Ready to Transform Your IT Infrastructure?
-          </h2>
-          <p className="text-primary-foreground/80 text-lg max-w-2xl mx-auto mb-8">
-            Get in touch with our experts today and discover how Corehex Solutions can help your business thrive with reliable IT support.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/contact">
-              <Button variant="cta" size="xl">
-                Get Started Today
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </Link>
-            <a href="tel:+919879300929">
-              <Button variant="heroOutline" size="xl">
-                <Phone className="w-5 h-5" />
-                +91 9879300929
-              </Button>
-            </a>
+      <section className="stack-panel relative z-30 overflow-hidden py-24 md:py-32 bg-[#050B14]">
+
+        {/* BACKGROUND */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+
+          {/* GLOW */}
+          <div className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[650px] h-[650px] bg-primary/15 blur-[160px] rounded-full animate-pulse" />
+
+          <div className="absolute bottom-[-100px] right-[-100px] w-[420px] h-[420px] bg-blue-500/10 blur-[140px] rounded-full" />
+
+          {/* GRID */}
+          <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:70px_70px]" />
+        </div>
+
+        <div className="container-custom relative z-20">
+
+          <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.03] backdrop-blur-2xl px-7 py-14 md:px-16 md:py-20 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
+
+            {/* INNER GLOW */}
+            <div className="absolute -top-24 right-[-80px] w-[320px] h-[320px] bg-primary/15 blur-[120px] rounded-full" />
+
+            <div className="relative z-10 max-w-5xl mx-auto text-center">
+
+             
+
+              {/* HEADING */}
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-white mb-6">
+                Transform Your Business With{" "}
+                <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
+                  Smart IT Infrastructure
+                </span>
+              </h2>
+
+              {/* DESCRIPTION */}
+              <p className="text-gray-400 text-base md:text-lg leading-relaxed max-w-3xl mx-auto mb-12">
+                Empower your company with scalable technology, proactive support,
+                advanced cybersecurity, and custom digital solutions designed for
+                long-term growth.
+              </p>
+
+              {/* BUTTONS */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-14">
+
+                <Link to="/contact">
+                  <Button
+                    size="lg"
+                    className="h-14 px-9 rounded-2xl text-base bg-primary hover:bg-primary/90 shadow-[0_0_40px_rgba(59,130,246,0.35)] hover:scale-105 transition-all duration-300"
+                  >
+                    Get Started Today
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+
+                <a href="tel:+919879300929">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="h-14 px-9 rounded-2xl border-white/15 bg-white/[0.04] text-white hover:bg-white/[0.08] backdrop-blur-xl"
+                  >
+                    <Phone className="w-5 h-5 mr-2" />
+                    Schedule a Call
+                  </Button>
+                </a>
+
+              </div>
+
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <div className="stack-panel relative z-10">
-        <Footer />
-      </div>
+      {/* FOOTER */}
+      <footer className="relative z-10 bg-[#030712] border-t border-white/10 overflow-hidden">
+
+        {/* BG EFFECT */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute bottom-[-120px] left-1/3 w-[380px] h-[380px] bg-primary/10 blur-[140px] rounded-full" />
+        </div>
+
+        <div className="container-custom relative z-10 pt-20 pb-10">
+
+          {/* TOP */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-14">
+
+            {/* BRAND */}
+            <div>
+
+              <h2 className="text-3xl font-bold text-white mb-5">
+                Corehex
+                <span className="text-primary"> Solutions</span>
+              </h2>
+
+              <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                Delivering modern IT infrastructure, cybersecurity,
+                cloud solutions, and software development services
+                for businesses across industries.
+              </p>
+
+              {/* SOCIAL */}
+              <div className="flex items-center gap-4">
+
+                {["in", "ig", "tw"].map((item, index) => (
+                  <div
+                    key={index}
+                    className="w-11 h-11 rounded-xl border border-white/10 bg-white/[0.03] flex items-center justify-center text-sm text-gray-300 hover:text-white hover:border-primary/30 hover:bg-primary/10 transition-all duration-300 cursor-pointer"
+                  >
+                    {item}
+                  </div>
+                ))}
+
+              </div>
+            </div>
+
+            {/* SERVICES */}
+            <div>
+              <h3 className="text-white text-lg font-semibold mb-6">
+                Services
+              </h3>
+
+              <ul className="space-y-4 text-sm text-gray-400">
+
+                {[
+                  "IT Infrastructure",
+                  "Cybersecurity",
+                  "Cloud Solutions",
+                  "Software Development",
+                  "IT Consulting",
+                ].map((item, index) => (
+                  <li
+                    key={index}
+                    className="hover:text-primary transition-colors duration-300 cursor-pointer"
+                  >
+                    {item}
+                  </li>
+                ))}
+
+              </ul>
+            </div>
+
+            {/* COMPANY */}
+            <div>
+              <h3 className="text-white text-lg font-semibold mb-6">
+                Company
+              </h3>
+
+              <ul className="space-y-4 text-sm text-gray-400">
+
+                {[
+                  "About Us",
+                  "Projects",
+                  "Testimonials",
+                  "Contact",
+                  "Support",
+                ].map((item, index) => (
+                  <li
+                    key={index}
+                    className="hover:text-primary transition-colors duration-300 cursor-pointer"
+                  >
+                    {item}
+                  </li>
+                ))}
+
+              </ul>
+            </div>
+
+            {/* CONTACT */}
+            <div>
+              <h3 className="text-white text-lg font-semibold mb-6">
+                Contact
+              </h3>
+
+              <div className="space-y-5 text-sm text-gray-400">
+
+                <div>
+                  <p className="text-white mb-1 font-medium">
+                    Phone
+                  </p>
+                  <p>+91 9879300929</p>
+                </div>
+
+                <div>
+                  <p className="text-white mb-1 font-medium">
+                    Email
+                  </p>
+                  <p>contact@corehexsolutions.com</p>
+                </div>
+
+                <div>
+                  <p className="text-white mb-1 font-medium">
+                    Availability
+                  </p>
+                  <p>24/7 Technical Support</p>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          {/* DIVIDER */}
+          <div className="mt-16 mb-8 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+          {/* BOTTOM */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-5">
+
+            <p className="text-gray-500 text-sm text-center md:text-left">
+              © 2026 Corehex Solutions. All rights reserved.
+            </p>
+
+            <div className="flex items-center gap-6 text-sm text-gray-500">
+
+              <span className="hover:text-primary transition-colors duration-300 cursor-pointer">
+                Privacy Policy
+              </span>
+
+              <span className="hover:text-primary transition-colors duration-300 cursor-pointer">
+                Terms & Conditions
+              </span>
+
+            </div>
+
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
