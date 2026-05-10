@@ -130,7 +130,7 @@ export default function ScrollCarousel(): JSX.Element {
       {/* HEADER */}
       <div className="absolute top-10 left-0 w-full text-center z-10 pointer-events-none pt-4">
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-          Our <span className="text-indigo-400">Services</span>
+          Our <span className="text-primary">Services</span>
         </h2>
         <p className="text-white/60 text-sm md:text-base mt-3">
           Crafting scalable, modern digital solutions

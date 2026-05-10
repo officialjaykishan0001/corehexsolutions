@@ -29,6 +29,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ScrollCarousel from "@/components/ui/scroll-carousel";
 import Cards from "@/components/ui/Cards";
 import BgCards from "@/components/ui/Cards";
+import SplashCursor from "@/components/ui/SplashCursor";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -144,10 +145,23 @@ export default function Index() {
 
   return (
     <div ref={containerRef} className="min-h-screen bg-background">
+      {/* <SplashCursor
+        DENSITY_DISSIPATION={3.5}
+        VELOCITY_DISSIPATION={2}
+        PRESSURE={0.1}
+        CURL={3}
+        SPLAT_RADIUS={0.2}
+        SPLAT_FORCE={6000}
+        COLOR_UPDATE_SPEED={10}
+        SHADING
+        RAINBOW_MODE={false}
+        COLOR="#3b82f6"
+      /> */}
       <Navbar />
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
+
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroBg})` }}
@@ -493,7 +507,7 @@ export default function Index() {
 
             <div className="relative z-10 max-w-5xl mx-auto text-center">
 
-             
+
 
               {/* HEADING */}
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-white mb-6">
