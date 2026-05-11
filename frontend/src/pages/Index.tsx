@@ -107,21 +107,57 @@ export default function Index() {
   const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const panels = gsap.utils.toArray<HTMLElement>(".stack-panel");
+  if (!containerRef.current) return;
 
-      panels.forEach((panel, i) => {
-        ScrollTrigger.create({
-          trigger: panel,
-          start: "top top",
-          pin: true,
-          pinSpacing: i === panels.length - 1,
-        });
+  const ctx = gsap.context(() => {
+    const panels = gsap.utils.toArray<HTMLElement>(".stack-panel");
+
+    // Better GPU rendering
+    gsap.set(panels, {
+      force3D: true,
+      willChange: "transform",
+    });
+
+    panels.forEach((panel, index) => {
+      ScrollTrigger.create({
+        trigger: panel,
+
+        // smoother pin timing
+        start: "top top",
+
+        // prevents layout jumps
+        pin: true,
+
+        // only last section keeps spacing
+        pinSpacing: index === panels.length - 1,
+
+        // smoother calculations
+        anticipatePin: 1,
+
+        // improves scroll performance
+        fastScrollEnd: true,
+
+        // reduces refresh calculations
+        invalidateOnRefresh: false,
+
+        // prevents mobile resize lag
+        ignoreMobileResize: true,
+
+        // smoother scrub feel
+        scrub: false,
       });
-    }, containerRef);
+    });
 
-    return () => ctx.revert();
-  }, []);
+    // optimize refresh behavior
+    ScrollTrigger.sort();
+    ScrollTrigger.refresh();
+  }, containerRef);
+
+  return () => {
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    ctx.revert();
+  };
+}, []);
 
   useEffect(() => {
     if (!cardsRef.current) return;
@@ -229,6 +265,7 @@ export default function Index() {
           </div>
         </div>
       </section>
+      
       {/* <section className="stack-panel relative z-10 min-h-screen section-padding bg-white"> */}
       <ScrollCarousel />
       {/* </section> */}
