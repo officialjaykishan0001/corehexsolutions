@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-
-import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 import gsap from "gsap";
@@ -14,94 +12,81 @@ import SectionHeader from "@/components/SectionHeader";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const milestones = [
-  {
-    year: "2014",
-    title: "Company Founded",
-    description:
-      "Started with a vision to simplify IT for businesses.",
-  },
-  {
-    year: "2016",
-    title: "100+ Clients",
-    description:
-      "Expanded services and crossed our first major milestone.",
-  },
-  {
-    year: "2019",
-    title: "Cybersecurity Division",
-    description:
-      "Launched dedicated security solutions.",
-  },
-  {
-    year: "2022",
-    title: "Regional Expansion",
-    description:
-      "Extended services across Gujarat and beyond.",
-  },
-  {
-    year: "2024",
-    title: "500+ Clients",
-    description:
-      "Trusted partner to hundreds of businesses.",
-  },
-];
-
 export default function About() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef =
+    useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (!containerRef.current) return;
+
     const ctx = gsap.context(() => {
       const panels =
-        gsap.utils.toArray<HTMLElement>(".stack-panel");
+        gsap.utils.toArray<HTMLElement>(
+          ".stack-panel"
+        );
+
+      // Better GPU rendering
+      gsap.set(panels, {
+        force3D: true,
+        willChange: "transform",
+      });
 
       panels.forEach((panel, index) => {
-        const isLast = index === panels.length - 1;
-
-        gsap.set(panel, {
-          willChange: "transform",
-          force3D: true,
+        // subtle scale animation
+        gsap.to(panel, {
+          scale: 0.96,
+          borderRadius: 28,
+          ease: "none",
+          scrollTrigger: {
+            trigger: panel,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
         });
 
         ScrollTrigger.create({
           trigger: panel,
+
+          // smoother pin timing
           start: "top top",
-          end: "bottom top",
+
+          // prevents layout jumps
           pin: true,
-          pinSpacing: isLast,
-          scrub: 0.6,
+
+          // only last section keeps spacing
+          pinSpacing:
+            index === panels.length - 1,
+
+          // smoother calculations
           anticipatePin: 1,
-          invalidateOnRefresh: true,
 
-          onUpdate: (self) => {
-            const progress = self.progress;
+          // improves scroll performance
+          fastScrollEnd: true,
 
-            gsap.to(panel, {
-              scale: 1 - progress * 0.035,
-              y: -progress * 20,
-              borderRadius: progress * 28,
-              duration: 0.12,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          },
+          // reduces refresh calculations
+          invalidateOnRefresh: false,
 
-          onLeaveBack: () => {
-            gsap.to(panel, {
-              scale: 1,
-              y: 0,
-              borderRadius: 0,
-              duration: 0.2,
-              ease: "power2.out",
-            });
-          },
+          // prevents mobile resize lag
+          ignoreMobileResize: true,
+
+          // smoother scrub feel
+          scrub: false,
         });
       });
 
+      // optimize refresh behavior
+      ScrollTrigger.sort();
       ScrollTrigger.refresh();
     }, containerRef);
 
-    return () => ctx.revert();
+    return () => {
+      ScrollTrigger.getAll().forEach(
+        (trigger) => trigger.kill()
+      );
+
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -113,8 +98,7 @@ export default function About() {
 
       {/* HERO */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* BG */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.18),transparent_45%)]" />
 
           <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:72px_72px]" />
@@ -122,23 +106,9 @@ export default function About() {
           <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[850px] h-[520px] bg-primary/10 blur-[160px] rounded-full" />
         </div>
 
-        <div className="container-custom relative z-10">
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 30,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 0.8,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="max-w-5xl mx-auto text-center"
-          >
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 py-2 backdrop-blur-xl mb-8">
+        <div className="container-custom relative z-10 pt-24">
+          <div className="max-w-5xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 py-2 backdrop-blur-xl mb-8 shadow-[0_0_40px_rgba(59,130,246,0.08)]">
               <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
 
               <span className="text-sm text-white/70">
@@ -155,39 +125,23 @@ export default function About() {
             </h1>
 
             <p className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
-              Secure, scalable, and future-ready technology
-              solutions designed for modern businesses.
+              Secure, scalable, and future-ready
+              technology solutions designed for
+              modern businesses.
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* WHO WE ARE */}
-      <section className="z-30 stack-panel relative min-h-screen flex items-center bg-[#070b18] overflow-hidden">
+      <section className="stack-panel relative z-30 min-h-screen flex items-center overflow-hidden bg-[#070b18] border-t border-white/[0.03]">
         <div className="absolute inset-0 bg-gradient-to-b from-white/[0.015] to-transparent" />
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(59,130,246,0.10),transparent_35%)]" />
 
-        <div className="container-custom relative z-10">
+        <div className="container-custom relative z-10 py-24">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* LEFT */}
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 24,
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{
-                once: true,
-                amount: 0.3,
-              }}
-              transition={{
-                duration: 0.6,
-              }}
-            >
+            <div>
               <SectionHeader
                 badge="Who We Are"
                 title="Focused on scalable and future-ready IT"
@@ -195,21 +149,24 @@ export default function About() {
               />
 
               <p className="text-white/65 leading-relaxed mb-6 max-w-xl text-lg">
-                Corehex Solutions delivers modern IT
-                infrastructure, cybersecurity, networking,
-                cloud systems, and software solutions
-                tailored for growing businesses.
+                Corehex Solutions delivers
+                modern IT infrastructure,
+                cybersecurity, networking,
+                cloud systems, and software
+                solutions tailored for growing
+                businesses.
               </p>
 
               <p className="text-white/50 leading-relaxed max-w-xl">
-                We combine reliability, performance, and
-                clean execution to help organizations
-                scale confidently in a digital-first world.
+                We combine reliability,
+                performance, and clean
+                execution to help organizations
+                scale confidently in a
+                digital-first world.
               </p>
-            </motion.div>
+            </div>
 
-            {/* RIGHT */}
-            <div className="relative overflow-hidden rounded-[36px] border border-white/10 bg-white/[0.04] backdrop-blur-2xl p-10 md:p-12">
+            <div className="relative overflow-hidden rounded-[36px] border border-white/10 bg-white/[0.04] backdrop-blur-2xl p-10 md:p-12 shadow-[0_10px_80px_rgba(0,0,0,0.35)]">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.14),transparent_35%)]" />
 
               <div className="relative z-10 grid grid-cols-2 gap-8">
@@ -239,33 +196,16 @@ export default function About() {
       </section>
 
       {/* FOUNDER */}
-      <section className="z-30 stack-panel relative min-h-screen flex items-center bg-[#08101c] overflow-hidden">
+      <section className="stack-panel relative z-30 min-h-screen flex items-center overflow-hidden bg-[#08101c] border-t border-white/[0.03]">
         <div className="absolute inset-0 bg-gradient-to-b from-white/[0.015] to-transparent" />
 
         <div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] bg-primary/10 blur-[160px] rounded-full" />
 
-        <div className="container-custom relative z-10">
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 24,
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-            }}
-            viewport={{
-              once: true,
-            }}
-            transition={{
-              duration: 0.7,
-            }}
-            className="relative overflow-hidden rounded-[40px] border border-white/10 bg-white/[0.03] backdrop-blur-2xl"
-          >
+        <div className="container-custom relative z-10 py-24">
+          <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-white/[0.03] backdrop-blur-2xl shadow-[0_10px_80px_rgba(0,0,0,0.35)]">
             <div className="grid lg:grid-cols-[340px_1fr]">
-              {/* LEFT */}
               <div className="border-b lg:border-b-0 lg:border-r border-white/10 p-10 bg-white/[0.02]">
-                <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary to-blue-400 p-[1px] mb-8">
+                <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary to-blue-400 p-[1px] mb-8 shadow-[0_0_50px_rgba(59,130,246,0.25)]">
                   <div className="w-full h-full rounded-3xl bg-[#0b1220] flex items-center justify-center text-3xl font-semibold">
                     CK
                   </div>
@@ -282,15 +222,15 @@ export default function About() {
                 <div className="mt-10 h-px bg-white/10" />
 
                 <p className="mt-8 text-white/45 text-sm leading-relaxed">
-                  Building reliable digital systems focused
-                  on scalability, security, and long-term
-                  growth.
+                  Building reliable digital
+                  systems focused on
+                  scalability, security, and
+                  long-term growth.
                 </p>
               </div>
 
-              {/* RIGHT */}
               <div className="relative p-10 md:p-16">
-                <div className="absolute top-8 right-10 text-[140px] leading-none text-white/[0.03] font-bold">
+                <div className="absolute top-8 right-10 text-[140px] leading-none text-white/[0.03] font-bold select-none">
                   “
                 </div>
 
@@ -304,48 +244,36 @@ export default function About() {
                   </div>
 
                   <p className="text-2xl md:text-[30px] leading-[1.5] text-white/80 font-light max-w-4xl">
-                    At Corehex Solutions, we believe
-                    technology should create momentum for
-                    businesses — not complexity.
+                    At Corehex Solutions, we
+                    believe technology should
+                    create momentum for
+                    businesses — not
+                    complexity.
                   </p>
 
                   <p className="mt-8 text-white/55 leading-relaxed max-w-3xl text-lg">
-                    Every solution we design is built
-                    around reliability, scalability, and
-                    long-term performance to help
-                    organizations grow with confidence.
+                    Every solution we design
+                    is built around
+                    reliability, scalability,
+                    and long-term performance
+                    to help organizations grow
+                    with confidence.
                   </p>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="z-30 stack-panel relative min-h-screen flex items-center overflow-hidden bg-[#070d18]">
+      <section className="stack-panel relative z-30 min-h-screen flex items-center overflow-hidden bg-[#070d18] border-t border-white/[0.03]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.16),transparent_45%)]" />
 
         <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:72px_72px]" />
 
-        <div className="container-custom relative z-10">
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 24,
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-            }}
-            viewport={{
-              once: true,
-            }}
-            transition={{
-              duration: 0.7,
-            }}
-            className="max-w-4xl mx-auto text-center"
-          >
+        <div className="container-custom relative z-10 py-24">
+          <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-6xl font-bold leading-[1.05] mb-6">
               Let’s Build Smarter
 
@@ -354,27 +282,31 @@ export default function About() {
               </span>
             </h2>
 
-            <p className="text-white/65 text-lg max-w-2xl mx-auto mb-10">
-              Secure, scalable, and future-ready
-              technology solutions built for long-term
+            <p className="text-white/65 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+              Secure, scalable, and
+              future-ready technology
+              solutions built for long-term
               business growth.
             </p>
 
             <Link to="/contact">
               <Button
                 size="xl"
-                className="h-14 px-9 rounded-2xl bg-white text-black hover:bg-white/90"
+                className="group h-14 px-9 rounded-2xl bg-white text-black hover:bg-white/90 transition-all duration-300 hover:scale-[1.02]"
               >
                 Get in Touch
 
-                <ArrowRight className="w-5 h-5 ml-2" />
+                <ArrowRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      <Footer />
+      {/* FOOTER */}
+      <div className="relative z-20 bg-[#050816] border-t border-white/[0.03]">
+        <Footer />
+      </div>
     </div>
   );
 }
