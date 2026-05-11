@@ -17,111 +17,157 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="bg-foreground text-background">
-      <div className="container-custom py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Company Info */}
-          <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center mb-6">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-shadow mr-1">
-               <img src="/corehex(2).png" className="" alt="logo" />
-            </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-lg tracking-tight text-background">
-                  Corehex
-                </span>
-                <span className="text-xs font-medium -mt-1 text-background/70">
-                  Solutions
-                </span>
-              </div>
-            </Link>
-            <p className="text-background/70 text-sm leading-relaxed mb-6">
-              Reliable IT Solutions for Modern Businesses. We provide comprehensive IT support to help your business thrive in the digital age.
-            </p>
-            <div className="space-y-3">
-              <a
-                href="mailto:corehexsolutions@gmail.com"
-                className="flex items-center gap-3 text-background/70 hover:text-background transition-colors text-sm"
-              >
-                <Mail className="w-4 h-4 text-primary" />
-                corehexsolutions@gmail.com
-              </a>
-              <a
-                href="tel:+919879300929"
-                className="flex items-center gap-3 text-background/70 hover:text-background transition-colors text-sm"
-              >
-                <Phone className="w-4 h-4 text-primary" />
-                +91 9879300929
-              </a>
-              <div className="flex items-start gap-3 text-background/70 text-sm">
-                <MapPin className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                <span>30 Vijay Nagar, Near Ganga Sagar, New Sama Road, Vadodara, Gujarat – 390024</span>
-              </div>
-            </div>
-          </div>
+    <footer className="relative z-10 bg-[#030712] border-t border-white/10 overflow-hidden">
 
-          {/* Services */}
-          <div>
-            <h4 className="font-semibold text-background mb-6">Our Services</h4>
-            <ul className="space-y-3">
-              {footerLinks.services.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.href}
-                    className="text-background/70 hover:text-background text-sm transition-colors flex items-center gap-2 group"
-                  >
-                    <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all" />
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h4 className="font-semibold text-background mb-6">Company</h4>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.href}
-                    className="text-background/70 hover:text-background text-sm transition-colors flex items-center gap-2 group"
-                  >
-                    <ArrowRight className="w-3 h-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all" />
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Newsletter / CTA */}
-          <div>
-            <h4 className="font-semibold text-background mb-6">Get In Touch</h4>
-            <p className="text-background/70 text-sm mb-4">
-              Ready to transform your IT infrastructure? Contact us for a free consultation.
-            </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors"
-            >
-              Contact Us
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
+        {/* BG EFFECT */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute bottom-[-120px] left-1/3 w-[380px] h-[380px] bg-primary/10 blur-[140px] rounded-full" />
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-background/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-background/50 text-sm">
-            © {new Date().getFullYear()} Corehex Solutions. All rights reserved.
-          </p>
-          <p className="text-background/50 text-sm">
-            Reliable IT Solutions for Modern Businesses
-          </p>
+        <div className="container-custom relative z-10 pt-20 pb-10">
+
+          {/* TOP */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-14">
+
+            {/* BRAND */}
+            <div>
+
+              <h2 className="text-3xl font-bold text-white mb-5">
+                Corehex
+                <span className="text-primary"> Solutions</span>
+              </h2>
+
+              <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                Delivering modern IT infrastructure, cybersecurity,
+                cloud solutions, and software development services
+                for businesses across industries.
+              </p>
+
+              {/* SOCIAL */}
+              <div className="flex items-center gap-4">
+
+                {["in", "ig", "tw"].map((item, index) => (
+                  <div
+                    key={index}
+                    className="w-11 h-11 rounded-xl border border-white/10 bg-white/[0.03] flex items-center justify-center text-sm text-gray-300 hover:text-white hover:border-primary/30 hover:bg-primary/10 transition-all duration-300 cursor-pointer"
+                  >
+                    {item}
+                  </div>
+                ))}
+
+              </div>
+            </div>
+
+            {/* SERVICES */}
+            <div>
+              <h3 className="text-white text-lg font-semibold mb-6">
+                Services
+              </h3>
+
+              <ul className="space-y-4 text-sm text-gray-400">
+
+                {[
+                  "IT Infrastructure",
+                  "Cybersecurity",
+                  "Cloud Solutions",
+                  "Software Development",
+                  "IT Consulting",
+                ].map((item, index) => (
+                  <li
+                    key={index}
+                    className="hover:text-primary transition-colors duration-300 cursor-pointer"
+                  >
+                    {item}
+                  </li>
+                ))}
+
+              </ul>
+            </div>
+
+            {/* COMPANY */}
+            <div>
+              <h3 className="text-white text-lg font-semibold mb-6">
+                Company
+              </h3>
+
+              <ul className="space-y-4 text-sm text-gray-400">
+
+                {[
+                  "About Us",
+                  "Projects",
+                  "Testimonials",
+                  "Contact",
+                  "Support",
+                ].map((item, index) => (
+                  <li
+                    key={index}
+                    className="hover:text-primary transition-colors duration-300 cursor-pointer"
+                  >
+                    {item}
+                  </li>
+                ))}
+
+              </ul>
+            </div>
+
+            {/* CONTACT */}
+            <div>
+              <h3 className="text-white text-lg font-semibold mb-6">
+                Contact
+              </h3>
+
+              <div className="space-y-5 text-sm text-gray-400">
+
+                <div>
+                  <p className="text-white mb-1 font-medium">
+                    Phone
+                  </p>
+                  <p>+91 9879300929</p>
+                </div>
+
+                <div>
+                  <p className="text-white mb-1 font-medium">
+                    Email
+                  </p>
+                  <p>contact@corehexsolutions.com</p>
+                </div>
+
+                <div>
+                  <p className="text-white mb-1 font-medium">
+                    Availability
+                  </p>
+                  <p>24/7 Technical Support</p>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          {/* DIVIDER */}
+          <div className="mt-16 mb-8 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+          {/* BOTTOM */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-5">
+
+            <p className="text-gray-500 text-sm text-center md:text-left">
+              © 2026 Corehex Solutions. All rights reserved.
+            </p>
+
+            <div className="flex items-center gap-6 text-sm text-gray-500">
+
+              <span className="hover:text-primary transition-colors duration-300 cursor-pointer">
+                Privacy Policy
+              </span>
+
+              <span className="hover:text-primary transition-colors duration-300 cursor-pointer">
+                Terms & Conditions
+              </span>
+
+            </div>
+
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
   );
 }
