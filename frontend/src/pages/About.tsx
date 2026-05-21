@@ -170,7 +170,7 @@ export default function About() {
       </section>
 
       {/* FOUNDER */}
-      <section className="stack-panel relative z-30 min-h-screen flex items-center overflow-hidden bg-[#08101c] border-t border-white/[0.03]">
+      {/* <section className="stack-panel relative z-30 min-h-screen flex items-center overflow-hidden bg-[#08101c] border-t border-white/[0.03]">
         <div className="absolute inset-0 bg-gradient-to-b from-white/[0.015] to-transparent" />
 
         <div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] bg-primary/10 blur-[160px] rounded-full" />
@@ -238,7 +238,7 @@ export default function About() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA */}
       <section className="stack-panel relative z-30 min-h-screen flex items-center overflow-hidden bg-[#070d18] border-t border-white/[0.03]">
