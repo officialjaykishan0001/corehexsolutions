@@ -16,14 +16,12 @@ export default function About() {
   const containerRef =
     useRef<HTMLDivElement | null>(null);
 
+ 
   useEffect(() => {
     if (!containerRef.current) return;
 
     const ctx = gsap.context(() => {
-      const panels =
-        gsap.utils.toArray<HTMLElement>(
-          ".stack-panel"
-        );
+      const panels = gsap.utils.toArray<HTMLElement>(".stack-panel");
 
       // Better GPU rendering
       gsap.set(panels, {
@@ -32,19 +30,6 @@ export default function About() {
       });
 
       panels.forEach((panel, index) => {
-        // subtle scale animation
-        gsap.to(panel, {
-          scale: 0.96,
-          borderRadius: 28,
-          ease: "none",
-          scrollTrigger: {
-            trigger: panel,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-
         ScrollTrigger.create({
           trigger: panel,
 
@@ -55,8 +40,7 @@ export default function About() {
           pin: true,
 
           // only last section keeps spacing
-          pinSpacing:
-            index === panels.length - 1,
+          pinSpacing: index === panels.length - 1,
 
           // smoother calculations
           anticipatePin: 1,
@@ -81,10 +65,7 @@ export default function About() {
     }, containerRef);
 
     return () => {
-      ScrollTrigger.getAll().forEach(
-        (trigger) => trigger.kill()
-      );
-
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       ctx.revert();
     };
   }, []);
@@ -108,13 +89,7 @@ export default function About() {
 
         <div className="container-custom relative z-10 pt-24">
           <div className="max-w-5xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 py-2 backdrop-blur-xl mb-8 shadow-[0_0_40px_rgba(59,130,246,0.08)]">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-
-              <span className="text-sm text-white/70">
-                About Corehex Solutions
-              </span>
-            </div>
+           
 
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.02] mb-8">
               Building Reliable
@@ -143,7 +118,6 @@ export default function About() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <SectionHeader
-                badge="Who We Are"
                 title="Focused on scalable and future-ready IT"
                 centered={false}
               />
@@ -207,16 +181,16 @@ export default function About() {
               <div className="border-b lg:border-b-0 lg:border-r border-white/10 p-10 bg-white/[0.02]">
                 <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary to-blue-400 p-[1px] mb-8 shadow-[0_0_50px_rgba(59,130,246,0.25)]">
                   <div className="w-full h-full rounded-3xl bg-[#0b1220] flex items-center justify-center text-3xl font-semibold">
-                    CK
+                    RK
                   </div>
                 </div>
 
                 <h3 className="text-3xl font-semibold mb-2">
-                  Chirag Kishan
+                  Rahul Kanojiya
                 </h3>
 
                 <p className="text-primary text-sm tracking-wide uppercase">
-                  Founder & Managing Director
+                  Founder 
                 </p>
 
                 <div className="mt-10 h-px bg-white/10" />
