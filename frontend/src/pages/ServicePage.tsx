@@ -328,7 +328,7 @@ export default function ServicePage() {
       </section>
 
       {/* ── Projects Showcase (software-development only) ──────────────────────── */}
-      {service.projects && service.projects.length > 0 && (
+      {false && service.projects && service.projects.length > 0 && (
         <section className="section-padding">
           <div className="container-custom">
             {/* Section header */}
