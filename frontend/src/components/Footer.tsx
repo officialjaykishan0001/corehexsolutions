@@ -15,7 +15,20 @@ const footerLinks = {
     { name: "Contact Us", href: "/contact" },
   ],
 };
-
+const socialLinks = [
+  {
+    icon: <Linkedin size={20} />,
+    url: "https://www.linkedin.com/company/corehex-solutions",
+  },
+  {
+    icon: <SiInstagram size={20} />,
+    url: "https://www.instagram.com/corehex2026",
+  },
+  // {
+  //   icon: <Twitter size={20} />,
+  //   url: "https://twitter.com/corehex2026",
+  // },
+];
 export default function Footer() {
   return (
     <footer className="relative z-10 bg-[#030712] border-t border-white/10 overflow-hidden">
@@ -46,21 +59,19 @@ export default function Footer() {
 
             {/* SOCIAL */}
             <div className="flex items-center gap-4">
-              {[
-                <Linkedin key="linkedin" size={20} />,
-                <SiInstagram key="instagram" size={20} />,
-                <Twitter key="twitter" size={20} />,
-              ].map((icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-11 h-11 rounded-xl border border-white/10 bg-white/[0.03] flex items-center justify-center text-gray-300 hover:text-white hover:border-primary/30 hover:bg-primary/10 transition-all duration-300"
-                >
-                  {icon}
-                </a>
-              ))}
+              {
+                socialLinks.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-11 h-11 rounded-xl border border-white/10 bg-white/[0.03] flex items-center justify-center text-gray-300 hover:text-white hover:border-primary/30 hover:bg-primary/10 transition-all duration-300"
+                  >
+                    {social.icon}
+                  </a>
+                ))
+              }
             </div>
           </div>
 

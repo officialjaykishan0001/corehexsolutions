@@ -112,8 +112,9 @@ export default function Navbar() {
                   Corehex
                 </span>
 
-                <span className="text-white/45 text-xs tracking-[0.18em] uppercase mt-1">
-                  Solutions
+                <span className="text-white/45 text-[10px] tracking-[0.1em] uppercase mt-1">
+                  <span className="md:hidden">Solutions</span>
+                  <span className="hidden md:inline">Hardware & Software Solutions</span>
                 </span>
               </div>
             </Link>

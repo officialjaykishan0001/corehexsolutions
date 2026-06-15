@@ -32,101 +32,17 @@ import BgCards from "@/components/ui/Cards";
 import SplashCursor from "@/components/ui/SplashCursor";
 import { motion } from "framer-motion";
 import Testimonials from "@/components/Testimonials";
+import { statsData } from "@/data/statsData";
+import { whyChooseUsData } from "@/data/whyChooseUsData";
 
-gsap.registerPlugin(ScrollTrigger);
 
-const keyServices = [
-  {
-    icon: Server,
-    title: "IT Infrastructure",
-    description: "Complete hardware support and infrastructure management tailored to your business needs.",
-  },
-  {
-    icon: Shield,
-    title: "Cybersecurity",
-    description: "Comprehensive security solutions to protect your business from digital threats.",
-  },
-  {
-    icon: Database,
-    title: "Data Management",
-    description: "Secure backup, recovery, and analytics solutions for your critical business data.",
-  },
-  {
-    icon: Network,
-    title: "Network Solutions",
-    description: "Reliable network monitoring, security, and managed services for optimal performance.",
-  },
-  {
-    icon: Headphones,
-    title: "Help Desk Support",
-    description: "24/7 technical support to keep your operations running smoothly.",
-  },
-  {
-    icon: Settings,
-    title: "IT Consulting",
-    description: "Strategic technology consulting to drive your digital transformation journey.",
-  },
-  {
-    icon: Code,
-    title: "Software Development",
-    description: "Custom web and mobile application development tailored to your business goals using modern technologies.",
-  }
 
-];
-
-const whyChooseUs = [
-  {
-    icon: CheckCircle,
-    title: "Proven Reliability",
-    description: "Years of trusted service delivering consistent, dependable IT solutions.",
-  },
-  {
-    icon: Shield,
-    title: "Enterprise Security",
-    description: "Advanced security protocols protecting your valuable business assets.",
-  },
-  {
-    icon: Award,
-    title: "Expert Team",
-    description: "Certified professionals with deep expertise across all IT domains.",
-  },
-  {
-    icon: Clock,
-    title: "24/7 Support",
-    description: "Round-the-clock assistance ensuring your systems never skip a beat.",
-  },
-];
-
-const stats = [
-  { value: "10+", label: "Clients Served" },
-  { value: "99.9%", label: "Uptime Guarantee" },
-  { value: "24/7", label: "Support Available" },
-  { value: "2+", label: "Years Experience" },
-];
 
 export default function Index() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!cardsRef.current) return;
-
-    const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray<HTMLElement>(".feature-card");
-
-      // REMOVE ALL GSAP ANIMATIONS
-      gsap.set(cards, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        rotateX: 0,
-        rotateY: 0,
-        clearProps: "transform",
-      });
-    }, cardsRef);
-
-    return () => ctx.revert();
-  }, []);
+ 
 
   return (
     <div ref={containerRef} className="min-h-screen bg-background">
@@ -203,7 +119,7 @@ export default function Index() {
             {/* GRID */}
             <div className="relative z-10 grid grid-cols-2 lg:grid-cols-4">
 
-              {stats.map((stat, index) => (
+              {statsData.map((stat, index) => (
                 <motion.div
                   key={stat.label}
                   initial={{
@@ -229,7 +145,7 @@ export default function Index() {
                   className={`
               relative group px-6 py-10 md:px-10 md:py-12
               transition-all duration-500
-              ${index !== stats.length - 1
+              ${index !== statsData.length - 1
                       ? "border-b lg:border-b-0 lg:border-r border-white/10"
                       : ""
                     }
@@ -328,7 +244,7 @@ export default function Index() {
             ref={cardsRef}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
           >
-            {whyChooseUs.map((feature) => (
+            {whyChooseUsData.map((feature) => (
               <div
                 key={feature.title}
                 className="feature-card relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-lg p-6 shadow-xl group min-h-[230px]"

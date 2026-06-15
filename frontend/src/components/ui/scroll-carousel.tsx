@@ -12,119 +12,54 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { keyServicesData } from "@/data/keyServicesData";
 
-const keyServices = [
-  {
-    id: 1,
-    icon: Server,
-    title: "IT Infrastructure",
-    slug: "it-infrastructure",
-    desc: "Complete hardware support and infrastructure management tailored to your business needs.",
-    src: "./services/server.png",
-  },
-  {
-    id: 2,
-    icon: Shield,
-    title: "Cybersecurity",
-    slug: "cybersecurity",
-    desc: "Comprehensive security solutions to protect your business from digital threats.",
-    src: "./services/cybersecurity.png",
-  },
-  {
-    id: 3,
-    icon: Database,
-    title: "Data Management",
-    slug: "data-solutions",
-    desc: "Secure backup, recovery, and analytics solutions for your critical business data.",
-    src: "./services/database-management.png",
-  },
-  {
-    id: 4,
-    icon: Network,
-    title: "Network Solutions",
-    slug: "network-management",
-    desc: "Reliable network monitoring, security, and managed services for optimal performance.",
-    src: "./services/network-solutions.png",
-  },
-  {
-    id: 5,
-    icon: Code,
-    title: "Software Development",
-    slug: "software-development",
-    desc: "Custom web and mobile application development tailored to your business goals using modern technologies.",
-    src: "./services/software-development.png",
-  },
-  {
-    id: 6,
-    icon: Briefcase,
-    title: "IT Consulting",
-    slug: "it-consulting",
-    desc: "Strategic technology consulting to drive your digital transformation journey.",
-    src: "./services/it-consulting.png",
-  },
-  {
-    id: 7,
-    icon: Headphones,
-    title: "Help Desk Support",
-    slug: "it-support",
-    desc: "24/7 technical support to keep your operations running smoothly.",
-    src: "./services/helpdesk-support.png",
-  },
-];
-
-// Triple-clone so the seam never shows even at high drag speeds
-const SLIDES = [...keyServices, ...keyServices, ...keyServices];
 
 const CARD_WIDTH = 436; // card 420px + margin 2×8px
 const SPEED = 0.55;
+const MAX_POS = CARD_WIDTH * (keyServicesData.length - 1); // stop at last card
 
 export default function ScrollCarousel(): JSX.Element {
-  const trackRef     = useRef<HTMLDivElement>(null);
-  const progressRef  = useRef<HTMLDivElement>(null);
-  const rafRef       = useRef<number>(0);
+  const trackRef    = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const rafRef      = useRef<number>(0);
 
-  // All mutable state lives in refs — zero React re-renders inside rAF
-  const posRef       = useRef(0);
-  const pausedRef    = useRef(false);   // hover pause
-  const draggingRef  = useRef(false);
-  const startXRef    = useRef(0);
-  const startPosRef  = useRef(0);
-  const velocityRef  = useRef(0);       // momentum after drag release
-  const lastXRef     = useRef(0);       // for velocity sampling
-  const dragMoved    = useRef(false);   // distinguish click vs drag
+  const posRef      = useRef(0);
+  const pausedRef   = useRef(false);
+  const draggingRef = useRef(false);
+  const startXRef   = useRef(0);
+  const startPosRef = useRef(0);
+  const velocityRef = useRef(0);
+  const lastXRef    = useRef(0);
+  const dragMoved   = useRef(false);
 
-  // ── Core render ────────────────────────────────────────────────────────────
+  // ── Clamp helper ──────────────────────────────────────────────────────────
+  const clamp = (v: number) => Math.max(0, Math.min(MAX_POS, v));
+
+  // ── Core render ───────────────────────────────────────────────────────────
   const commit = useCallback(() => {
     const track = trackRef.current;
     if (!track) return;
 
-    // halfWidth = one full copy of keyServices width
-    const halfWidth = CARD_WIDTH * keyServices.length;
-
-    // Infinite loop: keep pos inside the middle copy
-    if (posRef.current < halfWidth)          posRef.current += halfWidth;
-    if (posRef.current >= halfWidth * 2)     posRef.current -= halfWidth;
-
+    posRef.current = clamp(posRef.current);
     track.style.transform = `translateX(-${posRef.current}px)`;
 
-    // Update progress bar via direct DOM — no setState
     if (progressRef.current) {
-      const pct = ((posRef.current - halfWidth) / halfWidth) * 100;
-      progressRef.current.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+      const pct = (posRef.current / MAX_POS) * 100;
+      progressRef.current.style.width = `${pct}%`;
     }
   }, []);
 
-  // ── Animation loop ─────────────────────────────────────────────────────────
+  // ── Animation loop ────────────────────────────────────────────────────────
   const animate = useCallback(() => {
     if (!draggingRef.current) {
-      if (!pausedRef.current) {
+      if (!pausedRef.current && posRef.current < MAX_POS) {
         posRef.current += SPEED;
       }
 
-      // Momentum glide after drag release
       if (Math.abs(velocityRef.current) > 0.1) {
         posRef.current += velocityRef.current;
-        velocityRef.current *= 0.92; // friction
+        velocityRef.current *= 0.92;
       } else {
         velocityRef.current = 0;
       }
@@ -134,22 +69,21 @@ export default function ScrollCarousel(): JSX.Element {
     rafRef.current = requestAnimationFrame(animate);
   }, [commit]);
 
-  // ── Mouse handlers ─────────────────────────────────────────────────────────
+  // ── Mouse handlers ────────────────────────────────────────────────────────
   const onMouseDown = useCallback((e: React.MouseEvent) => {
-    draggingRef.current  = true;
-    dragMoved.current    = false;
-    velocityRef.current  = 0;
-    startXRef.current    = e.clientX;
-    startPosRef.current  = posRef.current;
-    lastXRef.current     = e.clientX;
+    draggingRef.current = true;
+    dragMoved.current   = false;
+    velocityRef.current = 0;
+    startXRef.current   = e.clientX;
+    startPosRef.current = posRef.current;
+    lastXRef.current    = e.clientX;
   }, []);
 
-  // Attached to window so drag works even if mouse leaves the card area
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
       if (!draggingRef.current) return;
       const delta = e.clientX - lastXRef.current;
-      velocityRef.current = -delta * 0.4;        // sample velocity
+      velocityRef.current = -delta * 0.4;
       lastXRef.current    = e.clientX;
       posRef.current      = startPosRef.current - (e.clientX - startXRef.current);
       dragMoved.current   = true;
@@ -167,35 +101,25 @@ export default function ScrollCarousel(): JSX.Element {
     };
   }, []);
 
-  // ── Touch handlers ─────────────────────────────────────────────────────────
-  // Attached imperatively so we can pass { passive: false } to call preventDefault
+  // ── Touch handlers ────────────────────────────────────────────────────────
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
 
     const onTouchStart = (e: TouchEvent) => {
-      draggingRef.current  = true;
-      dragMoved.current    = false;
-      velocityRef.current  = 0;
-      startXRef.current    = e.touches[0].clientX;
-      startPosRef.current  = posRef.current;
-      lastXRef.current     = e.touches[0].clientX;
+      draggingRef.current = true;
+      dragMoved.current   = false;
+      velocityRef.current = 0;
+      startXRef.current   = e.touches[0].clientX;
+      startPosRef.current = posRef.current;
+      lastXRef.current    = e.touches[0].clientX;
     };
 
     const onTouchMove = (e: TouchEvent) => {
       if (!draggingRef.current) return;
-
-      const dx = e.touches[0].clientX - lastXRef.current;
-      const dy = e.touches[0].clientY - (e.touches[0].clientY); // always 0; kept for clarity
-
-      // Only hijack horizontal swipes — let vertical scrolls pass through
+      const dx    = e.touches[0].clientX - lastXRef.current;
       const totalDX = Math.abs(e.touches[0].clientX - startXRef.current);
-      const totalDY = Math.abs(e.touches[0].clientY - startXRef.current); // approximate
-
-      if (totalDX > 8) {
-        e.preventDefault(); // block page scroll during horizontal swipe
-      }
-
+      if (totalDX > 8) e.preventDefault();
       velocityRef.current = -dx * 0.4;
       lastXRef.current    = e.touches[0].clientX;
       posRef.current      = startPosRef.current - (e.touches[0].clientX - startXRef.current);
@@ -207,7 +131,7 @@ export default function ScrollCarousel(): JSX.Element {
     };
 
     track.addEventListener("touchstart", onTouchStart, { passive: true });
-    track.addEventListener("touchmove",  onTouchMove,  { passive: false }); // must be non-passive for preventDefault
+    track.addEventListener("touchmove",  onTouchMove,  { passive: false });
     track.addEventListener("touchend",   onTouchEnd,   { passive: true });
 
     return () => {
@@ -217,21 +141,20 @@ export default function ScrollCarousel(): JSX.Element {
     };
   }, []);
 
-  // ── Block click-through after a drag ──────────────────────────────────────
+  // ── Click-through guard after drag ───────────────────────────────────────
   const onLinkClick = useCallback((e: React.MouseEvent) => {
     if (dragMoved.current) e.preventDefault();
   }, []);
 
-  // ── Arrow buttons ──────────────────────────────────────────────────────────
+  // ── Arrow buttons ─────────────────────────────────────────────────────────
   const nudge = useCallback((amount: number) => {
     velocityRef.current = 0;
-    posRef.current += amount;
+    posRef.current = clamp(posRef.current + amount);
   }, []);
 
   // ── Start loop ────────────────────────────────────────────────────────────
   useEffect(() => {
-    // Start in middle copy so both directions have room to loop
-    posRef.current = CARD_WIDTH * keyServices.length;
+    posRef.current = 0; // start at first card
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
   }, [animate]);
@@ -243,7 +166,7 @@ export default function ScrollCarousel(): JSX.Element {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.15),transparent_55%)] pointer-events-none" />
 
       {/* Header */}
-      <div className="absolute top-20 left-0 w-full text-center z-10 pointer-events-none pt-4">
+      <div className="absolute top-20 left-0 w-full text-center z-10 pointer-events-none pt-2">
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
           Our <span className="text-primary">Services</span>
         </h2>
@@ -282,7 +205,7 @@ export default function ScrollCarousel(): JSX.Element {
         <ChevronRight size={22} />
       </button>
 
-      {/* Progress bar — updated via DOM ref, not setState */}
+      {/* Progress bar */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[50%] h-[2px] bg-white/10 rounded-full overflow-hidden z-10">
         <div
           ref={progressRef}
@@ -304,7 +227,7 @@ export default function ScrollCarousel(): JSX.Element {
             if (!draggingRef.current) velocityRef.current = 0;
           }}
         >
-          {SLIDES.map((slide, index) => (
+          {keyServicesData.map((slide, index) => (
             <Link
               key={`${slide.id}-${index}`}
               to={`/services/${slide.slug}`}

@@ -9,13 +9,17 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SectionHeader from "@/components/SectionHeader";
+import { statsData } from "@/data/statsData";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
   const containerRef =
     useRef<HTMLDivElement | null>(null);
-
+  
+    useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
 
   return (
@@ -37,7 +41,7 @@ export default function About() {
 
         <div className="container-custom relative z-10 pt-24">
           <div className="max-w-5xl mx-auto text-center">
-           
+
 
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.02] mb-8">
               Building Reliable
@@ -92,22 +96,17 @@ export default function About() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.14),transparent_35%)]" />
 
               <div className="relative z-10 grid grid-cols-2 gap-8">
-                {[
-                  ["500+", "Clients"],
-                  ["10+", "Years"],
-                  ["24/7", "Support"],
-                  ["99.9%", "Uptime"],
-                ].map((item, index) => (
+                {statsData.map((stat, index) => (
                   <div
                     key={index}
                     className="text-center"
                   >
                     <h3 className="text-5xl font-bold bg-gradient-to-r from-primary to-blue-300 bg-clip-text text-transparent mb-3">
-                      {item[0]}
+                      {stat.value}
                     </h3>
 
                     <p className="text-white/55 text-sm tracking-wide uppercase">
-                      {item[1]}
+                      {stat.label}
                     </p>
                   </div>
                 ))}
